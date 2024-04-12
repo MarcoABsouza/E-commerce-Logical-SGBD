@@ -26,9 +26,36 @@ Fictitious data was inserted into all the tables to simulate a working e-commerc
 Several queries were carried out to demonstrate the database's functionalities. Some queries include:
 
 1. Which product did each customer buy.
+  """
+    select concat(cd.first_name," ",cd.middle_name," ",cd.last_name) as Client, p.name_product as Produto_Comprado
+    from clients_data as cd, products as p, order_client as oc
+    where cd.id_client = oc.client_id_order and oc.product_id_order = p.id_product; 
+  """
 2. Where does each client live.
+   """
+       select concat(cd.first_name," ",cd.middle_name," ",cd.last_name) as Client, ca.city as City
+       from clients_data as cd, clients_address as ca
+       where cd.id_client = ca.id_client;
+   """
 3. How many orders were placed by each customer.
+   """
+    select concat(cd.first_name," ",cd.middle_name," ",cd.last_name) as Client, count(oc.id_order) as Pedidos_Por_Cliente
+    from clients_data as cd, order_client as oc
+    where cd.id_client = oc.client_id_order
+    group by oc.id_order;
+  """
 4. List of product suppliers and stocks.
+   """
+    select s.name_supplier as Supplier, p.name_product as Produto_Enviado_Pelo_Fornecedor, se.quantity_product_storage as Quantidade_do_Produto_em_Estoque
+    from supplier_provides_products as spp, storage_ecommerce as se, supplier as s, products as p
+    where s.id_supplier = spp.supplier and p.id_product = spp.products_by_supplier and se.products_storage = p.id_product;
+    
+    SELECT p.name_product, s.name_supplier, se.quantity_product_storage
+    FROM products p
+    INNER JOIN supplier_provides_products spp ON p.id_product = spp.products_by_supplier
+    INNER JOIN supplier s ON spp.supplier = s.id_supplier
+    INNER JOIN storage_ecommerce se ON p.id_product = se.products_storage;
+  """
 
 These queries are just examples of how the database can be consulted to obtain useful information for managing e-commerce.
 
