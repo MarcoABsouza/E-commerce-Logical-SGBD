@@ -2,6 +2,11 @@
 
 This project consists of creating a database for an e-commerce system using MySQL. The database is designed to store information about customers, suppliers, products, orders and payments, as well as managing the relationship between these entities.
 
+## Model Database ER
+![Database relational schema]()
+
+
+
 ## Database Model
 The database model consists of seven main tables:
 
@@ -28,4 +33,6 @@ Several queries were carried out to demonstrate the database's functionalities. 
 4. List of product suppliers and stocks.
 
 These queries are just examples of how the database can be consulted to obtain useful information for managing e-commerce.
+
+
 
