@@ -6,7 +6,7 @@ This project consists of creating a database for an e-commerce system using MySQ
 <img src="banco de dados/e-commerce.png" alt="relational database schema">
 
 ## Database Model
-The database model consists of seven main tables:
+The database model consists of eight main tables:
 
 1. **clients_data**: Stores customers' personal information, such as name, email address, telephone number and social security number.
 2. **clients_address**: Stores customer addresses, associating them with the corresponding customers.
