@@ -74,5 +74,118 @@ Several queries were carried out to demonstrate the database's functionalities. 
 
 These queries are just examples of how the database can be consulted to obtain useful information for managing e-commerce.
 
+5. View clients details
+
+"""
+
+    create view Clients as 
+    select concat(cd.first_name," ",cd.middle_name," ",cd.last_name) as complete_name, cd.email as Email_Client,
+    cd.phone as Phone_CLiente, concat(ca.street," ",ca.number_address," ",ca.district," ",ca.city," ",ca.state," ",ca.cep) as Address
+    from clients_data as cd
+    Join clients_address ca on cd.id_client = ca.client_id;
+    
+    
+    select * from Clients;
+
+"""
+
+6. Create index on tables
+
+"""
+
+    create index idx_cpf on clients_data (cpf);
+    create index idx_cnpj on supplier (cnpj);
+    
+"""
+
+Now using some index create we can do some queries
+
+"""
+
+        select * 
+        from order_client as oc
+        join clients_data as ca on oc.client_id = ca.id_client
+        where ca.cpf = "45678901234";
+        
+        
+        select *
+        from supplier_products as sp
+        join supplier as s on sp.supplier_id = s.id_supplier
+        where s.cnpj = "34567890123456";
+        
+
+"""
+
+7. Create procedure in our db
+
+"""
+
+    delimiter \\
+    create procedure revenue()
+    begin
+    	declare current_revenue decimal(10,2);
+        
+        SELECT SUM(p.value_payment)
+        INTO current_revenue
+        FROM order_client oc
+        JOIN payment p ON oc.id_order = p.order_client_id
+        WHERE oc.status_order = 'Aprovado';
+    
+        -- Exibir a receita total
+        SELECT current_revenue;
+        
+    end \\
+    delimiter ;
+    
+    
+    delimiter ||
+    create procedure info_clients()
+    begin
+        select concat(first_name," ",middle_name," ",last_name) as complete_name,concat(street,",",number_address,",",district,",",city,",",state) from clients_data inner join clients_address on id_client = client_id;
+    end ||
+    delimiter ;
+    
+    
+    DELIMITER $$
+    CREATE PROCEDURE cancel_order(
+        IN id SMALLINT
+    )
+    BEGIN
+        -- Atualizar o status do pedido para "Cancelado"
+        UPDATE order_client
+        SET status_order = 'Cancelado', 
+            description_order = 
+                CASE 
+                    WHEN payment = TRUE THEN 'Realizar retorno ao cliente' 
+                    ELSE description_order 
+                END
+        WHERE id_order = id;
+    
+        -- Selecionar e retornar a mensagem de sucesso junto com o número do pedido cancelado
+        SELECT 'Pedido cancelado com sucesso' AS message, id AS numero_pedido_cancelado;
+    END $$
+    DELIMITER ;
+    
+    
+    delimiter ##
+    create procedure orders (
+    	in order_ varchar(50),
+        in id_order smallint
+    )
+    begin
+    	case order_
+    		when "check revenue" then
+    			call revenue;
+    		when "client information" then
+    			call info_clients;
+    		when "cancel order" then
+    			call cancel_order(id_order);
+            else
+    			select "ação invalida" as message;
+    	end case;
+    end ##
+    delimiter ;
+
+"""
 
 
