@@ -74,7 +74,8 @@ Several queries were carried out to demonstrate the database's functionalities. 
 
 These queries are just examples of how the database can be consulted to obtain useful information for managing e-commerce.
 
-5. View clients details
+## View db
+1. View clients details
 
 """
 
@@ -89,7 +90,8 @@ These queries are just examples of how the database can be consulted to obtain u
 
 """
 
-6. Create index on tables
+## Index use in our db
+1. Create index on tables
 
 """
 
@@ -115,8 +117,8 @@ Now using some index create we can do some queries
         
 
 """
-
-7. Create procedure in our db
+## Procedure
+1. Create procedure in our db
 
 """
 
