@@ -1,6 +1,6 @@
 # Database for E-commerce
 
-This project consists of creating a database for an e-commerce system using MySQL. The database is designed to store information about customers, suppliers, products, orders and payments, as well as managing the relationship between these entities.
+This project consists of creating a database for an e-commerce system using MySQL. The database is designed to store information about customers, suppliers, products, orders and payments, as well as managing the relationship between these entities.This project consists of creating a database for an e-commerce system using MySQL. The database is designed to store information about customers, suppliers, products, orders and payments, as well as managing the relationship between these entities. In this project I entered random data, made queries for some questions, created views, created indexes for some things and finally created procedures in my database for an e-commerce.
 
 ## Model Database ER
 <img src="banco de dados/e-commerce.png" alt="relational database schema">
