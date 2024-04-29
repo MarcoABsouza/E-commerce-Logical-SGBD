@@ -190,4 +190,29 @@ Now using some index create we can do some queries
 
 """
 
+### Triggers
+1. Trigger used before insertion, to check if the customer's cpf already exists in the database
 
+"""
+
+    delimiter \\
+    create trigger orders before insert on clients_data
+    for each row
+    	begin
+    		declare cpf_count int;
+            
+            
+            select count(*) into cpf_count
+            from clients_data use index (unique_cpf_client)
+            where cpf = new.cpf;
+            
+            
+            if cpf_count > 0 then
+    			signal sqlstate '45000'
+    			set message_text = "cpf ja existe no banco de dados";
+    		end if;
+    	end \\
+    
+    delimiter ;
+
+"""
