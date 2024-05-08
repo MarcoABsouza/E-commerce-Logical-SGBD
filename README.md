@@ -216,3 +216,62 @@ Now using some index create we can do some queries
     delimiter ;
 
 """
+
+### Transactions
+1. This transaction checks the processing of an order, so it checks the availability of the product and makes the appropriate changes to correctly process the service order.
+
+"""
+
+    delimiter $$
+    create procedure processar_pedido (
+    	in id_client_order smallint,
+        in id_product_order smallint,
+        in quantity smallint,
+        in type_payment_order enum("credito","debito","pix")
+    )
+    begin
+    	declare message varchar(255);
+        declare error boolean default false;
+        
+        -- Start transaction
+        start transaction;
+    
+        -- Check if the product is in stock
+        select quantity_product into @storage_available
+        from storage
+        where  id_product_order = product_id_storage;
+        
+        
+        if @storage_available > quantity then
+    		-- add order in order_client
+            insert into order_client (payment,status_order,description_order,client_id,product_id)
+            values (true, "Em andamento","Pedido em processamento",id_client_order, id_product_order);
+            
+            -- update storage
+            update storage
+            set quantity_product = quantity_product - quantity
+            where id_product_order = product_id_storage;
+            
+            -- register payment
+            insert into payment (type_payment,value_payment,order_client_id)
+            values (type_payment_order, (select value_product from products where id_product_order = id_product) * quantity, id_client_order);
+    	else
+    		set message = "Product not avaible";
+            set error = true;
+    	end if;
+        
+        -- check error
+        if error then
+    		-- rollback total
+    		rollback;
+            select message as error_mesage;
+    	else
+    		-- commit if don't have error
+            commit;
+            select "order already in process" as sucess_message;
+    	end if;
+        
+    end $$
+    delimiter ;
+
+"""
